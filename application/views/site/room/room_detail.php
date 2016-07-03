@@ -1,0 +1,328 @@
+<section id="breadcrum-wrap">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12 block">
+				<ol class="breadcrumb">
+				  	<li><a href="#">Home</a></li>
+				  	<li><a href="#">room</a></li>
+				  	<li class="active">room_detail</li>
+				</ol>
+			</div>
+		</div>
+	</div>
+</section>
+<section id="book-main">
+	<div class="container">
+		<div class="row">
+			<div class="block clearfix">
+				<div id="book-left" class="col-sm-8 col-xs-12">
+					<div class="tit-room">
+						<h1><?php echo (isset($info))? $info->post_room_name : '';?></h1>
+						<p>
+							<?php
+								echo (isset($info))? $info->house_type_name.' - '.$info->room_type_name.' - '.$info->address_detail : '';
+							?>
+						</p>
+					</div>
+					<div class ="slider-img">
+						<div class="fotorama" data-nav="thumbs" data-allowfullscreen="native">
+							<?php
+								$arr_img= (isset($info))?json_decode($info->image_list): '';
+								if($arr_img && is_array($arr_img)){
+									foreach ($arr_img as $img) {
+									
+							?>
+									<img src="<?php echo $img?>" data-caption="<?php echo strtoupper((isset($info))? $info->post_room_name : '');?>">
+							<?php
+									}
+								}else{
+									echo '<img src="'.base_url().'public/site/images/none.svg"  data-caption="NONE IMAGES">';
+								}
+							?>
+						  	
+						</div>
+					</div>
+					<div class="feature">
+						<ul class="wrap-fea clearfix">
+							<li class="inline fea-item" >
+								<span style = "background:url(<?php echo base_url(); ?>public/site/images/icon/feature-type-apartment.svg) no-repeat 50% 50%;"></span>
+								<?php echo (isset($info))? $info->house_type_name :'';?>
+							</li>
+							<li class="inline fea-item" >
+								<span style = "background:url(<?php echo base_url(); ?>public/site/images/icon/feature-room-entire_home.svg) no-repeat 50% 50%;"></span>
+								<?php echo (isset($info))? $info->room_type_name :'';?>
+							</li>
+							<li class="inline fea-item" >
+								<span style = "background:url(<?php echo base_url(); ?>public/site/images/icon/feature-guests.png) no-repeat 50% 50%;"></span>
+								<?php echo (isset($info))? $info->num_guest :'';?> Người
+							</li>
+							<li class="inline fea-item" >
+								<span style = "background:url(<?php echo base_url(); ?>public/site/images/icon/feature-bedroom.png) no-repeat 50% 50%;"></span>
+								<?php echo (isset($info))? $info->num_bedroom :'';?> Phòng ngủ
+							</li>
+							<li class="inline fea-item" >
+								<span style = "background:url(<?php echo base_url(); ?>public/site/images/icon/feature-bed.png) no-repeat 50% 50%;"></span>
+								<?php echo (isset($info))? $info->num_bed :''; ?> Giường
+							</li>
+							<li class="inline fea-item" >
+								<span style = "background:url(<?php echo base_url(); ?>public/site/images/icon/feature-bathroom.png) no-repeat 50% 50%;"></span>
+								<?php echo (isset($info))? $info->num_bathroom :'';?> Phòng tắm
+							</li>
+						</ul>
+					</div>
+					<div class="item-room description">
+						<h2>Mô tả</h2>
+						<p><?php echo (isset($info))? $info->description : '' ;?></p>
+					</div>
+					<div class="item-room amenities">
+						<h2>Tiện nghi</h2>
+						<ul class="clearfix">
+							<?php
+								$str_amenities = (isset($info))? $info->amenities: '';
+								if($str_amenities){
+									$arr_amenities = explode(',', $str_amenities);
+									foreach ($arr_amenities as $amenitie) {
+										foreach ($list_amenities as $value) {
+											if($amenitie == $value->amenities_id){
+												?>
+												<li>
+													<span class="glyphicon glyphicon-ok">&nbsp;</span><?php echo $value->name?>
+												</li>
+												<?php
+											}
+										}
+									}
+								}
+							?>
+						</ul>
+					</div>
+					<div class="item-room price">
+						<h2>Giá phòng</h2>
+						<div class="tb-price">
+							<table class="table table-striped">
+								<tbody>
+									<tr>
+										<th>Phí dọn dẹp</th>
+										<td><?php echo (isset($info) && $info->clearning_fee_vn) ? $info->clearning_fee_vn : 'Không có phí'?></td>
+									</tr>
+									<tr>
+										<th>Phí cho mỗi khách thêm</th>
+										<td><?php echo (isset($info) && $info->price_guest_more_vn) ? $info->price_guest_more_vn : 'Không có phí'?></td>
+									</tr>
+									<!-- <tr>
+										<th>Điều kiện hủy bỏ</th>
+										<td>Hoàn 50% số tiền 7 ngày trước khi nhận phòng</td>
+									</tr> -->
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<div class="item-room location">
+						<h2>Địa điểm</h2>
+						<div class="map-wrap" id="map-wrap">
+							<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d59587.962998060575!2d105.80194398283935!3d21.02277318570672!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135ab9bd9861ca1%3A0xe7887f7b72ca17a9!2zSGFub2ksIEhvw6BuIEtp4bq_bSwgSGFub2ksIFZpZXRuYW0!5e0!3m2!1sen!2s!4v1461318424156" width="600" height="450" frameborder="0" style="border:0" allowfullscreen></iframe>
+						</div>
+					</div>
+					<div class="item-room house-rules">
+						<h2>Quy định</h2>
+						<p>Xin vui lòng: <br>* được trách nhiệm và ân cần <br>* tắt đèn và tất cả các thiết bị điện / ghi khi bạn đang không ở trong nhà. Nó giúp để ngăn chặn quá nóng và tiết kiệm môi trường.
+						<br>* Giữ giày / dép và tất cả các đồ đạc khác bên trong căn hộ.
+						<br>* Không có thuốc trong căn hộ hay tòa nhà (hút thuốc trên ban công được phép) </p>
+					</div>
+					<div class="item-room other-detail">
+						<h2>Chi tiết khác</h2>
+						<div class="tb-detail table-responsive">
+							<table class="table table-striped">
+								<tbody>
+									<tr>
+										<th>Nhận phòng</th>
+										<td>...</td>
+									</tr>
+									<tr>
+										<th>Trả phòng</th>
+										<td>...</td>
+									</tr>
+									<tr>
+										<th>Diện tích</th>
+										<td><?php echo (isset($info))? $info->acreage : '';?> m<sup>2</sup></td>
+									</tr>
+									<!-- <tr>
+										<th>Số đêm tối thiểu</th>
+										<td>30 đêm</td>
+									</tr> -->
+									<tr>
+										<th>Số khách tối đa</th>
+										<td><?php echo (isset($info))? $info->num_guest : '';?> khách</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+				
+				<div id="book-right" class="col-sm-4 col-xs-12">
+					<div id="book-now" class="">
+						<div class="book-prices hidden-xs">
+							<div class="price-wrap clearfix">
+								<!-- <span class="label label-default pull-right">Khuyến mãi: Giảm 10% !</span> -->
+								<p class="price-num">
+									<span class="pr-curent"><?php echo number_format((isset($info))? $info->price_night_vn : 0);?></span>
+									<!-- <span class="pr-old">500.000</span> -->
+								</p>
+								<p class="currency">VND</p>
+								<p class="price-method">Giá trung bình theo đêm</p>
+							</div>
+						</div>
+						<div class="data-guest hidden-xs">
+                                                    <?php $query = "";
+                                                        if(isset($ch_in))$query.='&ch_in='.$ch_in;
+                                                        if(isset($ch_out))$query.='&ch_out='.$ch_out;
+                                                        if(isset($guest))$query.='&guest='.$guest;
+                                                        if(isset($_SESSION['room_id']))$room_id = $_SESSION['room_id'];
+                                                        else $room_id = 1;
+                                                    
+                                                    ?>
+                                                    <form action="<?php echo base_url('site/room/order_room/?id='.$room_id.$query);?>" id="frm-book" class="clearfix">
+								<div class="form-group w30 pull-left book-wrap">
+								    <label for="">Nhận phòng</label>
+                                                                    <input type="text" class="form-control bookin" id ="bookin-dpk" value="<?php echo isset($ch_in)?$ch_in:'';?>" placeholder="dd/mm/yyyy">
+								</div>
+								<div class="form-group w30 pull-left book-wrap middle">
+								    <label for="">Trả phòng</label>
+								    <input type="text" class="form-control bookout" id ="bookout-dpk" value="<?php echo isset($ch_out)?$ch_out:'';?>" placeholder="dd/mm/yyyy">
+								</div>
+								<div class="form-group w30 pull-left book-wrap">
+								    <label for="">Khách</label>
+								    <select name="" id="guests" class="form-control">
+								    	<option <?php echo isset($guest)&&$guest==1?'selected':'';?> >1</option>
+								    	<option <?php echo isset($guest)&&$guest==2?'selected':'';?> >2</option>
+								    	<option <?php echo isset($guest)&&$guest==3?'selected':'';?> >3</option>
+								    	<option <?php echo isset($guest)&&$guest==4?'selected':'';?> >4</option>
+								    	<option <?php echo isset($guest)&&$guest==5?'selected':'';?> >5</option>
+								    	<option <?php echo isset($guest)&&$guest==6?'selected':'';?> >6</option>
+								    	<option <?php echo isset($guest)&&$guest==7?'selected':'';?> >7</option>
+								    	<option <?php echo isset($guest)&&$guest==8?'selected':'';?>  >8</option>
+								    	<option <?php echo isset($guest)&&$guest==9?'selected':'';?> >9</option>
+								    	<option <?php echo isset($guest)&&$guest>9?'selected':'';?> >10+</option>
+								    </select>
+								</div>
+								<div class="clearfix"></div>
+								<div class="book-action">
+									<button type="submit" class="btn btn-success">
+										<span class="glyphicon glyphicon-time"></span> Đặt phòng
+									</button>
+								</div>
+							</form>
+						</div>
+						<div class="member clearfix">
+							<h2 class="visible-xs owner-xs">Chủ nhà</h2>
+							<div class="member-wrap clearfix">
+								<div class="member-avt pull-left">
+									<img src="<?php echo base_url(); ?>public/site/images/avata.jpg" width="100px" height="100px"/>
+								</div>
+								<div class="member-info">
+									<h5 class="name-mb"><?php echo (isset($info))? $info->last_name.' '.$info->first_name : ''; ?></h5>
+									<p class="since">Là thành viên từ tháng <?php echo date('m - Y', strtotime($info->user_created));?></p>
+									<p class="link-show">
+										<a href="#">Xem thông tin cá nhân</a>
+									</p>
+								</div>
+							</div>
+							<div class="update">
+								<p><span class="glyphicon glyphicon-refresh"></span> Cập nhật 2 ngày trước!</p>
+							</div>
+							<div class="contact-own">
+								<button class="btn btn-default">Liên hệ Chủ khách sạn</button>
+							</div>
+						</div>
+						<div class="share">
+							<p>Chia sẻ bài đăng này</p>
+							<ul>
+								<li class="inline">
+									<a href="#">
+										<img src="<?php echo base_url(); ?>public/site/images/icon/share-facebook.png">
+									</a>
+								</li>
+								<li class="inline">
+									<a href="#">
+										<img src="<?php echo base_url(); ?>public/site/images/icon/share-twitter.png">
+									</a>
+								</li>
+								<li class="inline">
+									<a href="#">
+										<img src="<?php echo base_url(); ?>public/site/images/icon/share-gplus.png">
+									</a>
+								</li>
+								<li class="inline">
+									<a href="#">
+										<img src="<?php echo base_url(); ?>public/site/images/icon/share-pinterest.png">
+									</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<section id="post-same">
+	
+</section>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		// $('#bookin-dpk').datepicker();
+		// $('#bookout-dpk').datepicker();
+		var nowTemp = new Date();
+		var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+		 
+		var checkin = $('#bookin-dpk').datepicker({
+		  onRender: function(date) {
+		    return date.valueOf() < now.valueOf() ? 'disabled' : '';
+		  },
+		   format: 'dd/mm/yyyy'
+		}).on('changeDate', function(ev) {
+		  if (ev.date.valueOf() > checkout.date.valueOf()) {
+		    var newDate = new Date(ev.date)
+		    newDate.setDate(newDate.getDate() + 1);
+		    checkout.setValue(newDate);
+		  }
+		  checkin.hide();
+		  $('#bookout-dpk')[0].focus();
+		}).data('datepicker');
+		var checkout = $('#bookout-dpk').datepicker({
+		  onRender: function(date) {
+		    return date.valueOf() <= checkin.date.valueOf() ? 'disabled' : '';
+		  },
+		  format: 'dd/mm/yyyy'
+		}).on('changeDate', function(ev) {
+		  checkout.hide();
+		}).data('datepicker');
+	})
+</script>
+
+<script type="text/javascript">
+	var lat = <?php echo (isset($info))? $info->lat : 0 ?>;
+    var lng = <?php echo (isset($info))? $info->lng : 0 ?>;
+	function initMap(){
+		var mapOption = {
+	        zoom: 16, 
+	        center: {lat: lat, lng: lng},
+	    }
+	    var map = new google.maps.Map(document.getElementById('map-wrap'), mapOption);
+		setMarker(map);
+	}
+
+	function setMarker(map){
+		 var marker = new google.maps.Marker({
+        	position: {lat: lat, lng: lng},
+        	animation: google.maps.Animation.DROP,
+        });
+        marker.setMap(map);
+	}
+
+</script>
+
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBwl-pYart0L9n0XPX_V5AuFFPmk-o-rlM&libraries=places&callback=initMap"></script>
