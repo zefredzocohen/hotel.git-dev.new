@@ -21,5 +21,4 @@ CKEDITOR.editorConfig = function( config ) {
 	config.filebrowserImageUploadUrl = path+'core/connector/php/connector.php?command=QuickUpload&type=Images';
 	 
 	config.filebrowserFlashUploadUrl = path+'core/connector/php/connector.php?command=QuickUpload&type=Flash';
-	config.extraPlugins = 'image2';
 };

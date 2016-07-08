@@ -188,9 +188,14 @@ class MY_Model extends CI_Model {
     /**
      * Lay 1 row
      */
-    function get_row($input = array()){
+    function get_row($input = array(),$join = array()){
         $this->get_list_set_input($input);
-
+        if(count($join)>0){
+            foreach ($join as $key => $value){
+                $tmp = explode('::', $value);
+                if(count($tmp)==2)$this->db->join($key, $key.'.'.$tmp[0].'='.  $this->table.'.'.$tmp[1]);
+            }
+        }
         $query = $this->db->get($this->table);
 
         return $query->row();

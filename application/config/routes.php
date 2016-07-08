@@ -54,5 +54,14 @@ $route['default_controller'] = 'site/home';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 $route['admin'] = "admin/login";
+//site
+$route['room'] = 'site/room';
 $route['room/(:any)'] = 'site/room/$1';
+$route['room/(:any)/(:any)'] = 'site/room/$1/$2';
+$route['home/(:any)'] = 'site/home/$1';
+$route['home'] = 'site/home';
+$route['user/(:any)'] = 'site/user/$1';
+$route['payments/(:any)/(:any)'] = 'site/payments/$1/(:any)';
+$route['payments'] = 'site/payments';
+$route['spaces/prices/(:any)'] = 'site/spaces/prices/$1';
 //$route['site'] = "site/home";

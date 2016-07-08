@@ -1,6 +1,5 @@
 <?php
 	defined('BASEPATH') OR exit('No direct script access allowed');
-
 	class Room extends MY_Controller {
 		function __construct(){
 			parent:: __construct();
@@ -9,10 +8,28 @@
                         $this->load->model('Amenities_model');
                         $this->load->model('Experience_model');
 		}
+                public function index(){
+                    redirect(base_url());
+                }
 
-		public function search(){
+                public function search(){
+                    $data['encode'] = $this->config->item('encode_id');
                     $_location = trim($this->input->get('location'));
                     if($_location!=NULL) $_location = vn_str_filter (strtolower ($_location));
+                    
+                    if(isset($_GET['location'])&&trim($_GET['location'])!=''){
+                        $data['location'] = trim($_GET['location']);
+                    }
+                    if(isset($_GET['checkin'])&&trim($_GET['checkin'])!=''){
+                        $data['checkin'] = trim($_GET['checkin']);
+                    }
+                    if(isset($_GET['checkout'])&&trim($_GET['checkout'])!=''){
+                        $data['checkout'] = trim($_GET['checkout']);
+                    }
+                    if(isset($_GET['guest'])&&trim($_GET['guest'])!=''){
+                        $data['guest'] = trim($_GET['guest']);
+                    }
+                    
                     $search_input = array(
                         'location'  =>  $_location,
                         'checkin'   =>  trim($this->input->get('checkin')),
@@ -23,7 +40,7 @@
                     $data['total'] = $total;
                     
                     $config['total_rows'] = $data['total'];
-                    $config['base_url'] = rtrim(base_url()."site/room/search?location=".$_GET['location']);
+                    $config['base_url'] = rtrim(base_url()."room/search?location=".$_GET['location']);
                     $config['per_page'] = 2;
                     $config['use_page_numbers'] = TRUE;
                     $config['page_query_string'] = TRUE;
@@ -52,15 +69,7 @@
                     $this->pagination->initialize($config);
                     $data['pagination_link'] = $this->pagination->create_links();
                     $data['per_page'] = $config['per_page'];
-                    if(isset($_GET['checkin'])&&trim($_GET['checkin'])!=''){
-                        $data['checkin'] = trim($_GET['checkin']);
-                    }
-                    if(isset($_GET['checkout'])&&trim($_GET['checkout'])!=''){
-                        $data['checkout'] = trim($_GET['checkout']);
-                    }
-                    if(isset($_GET['guest'])&&trim($_GET['guest'])!=''){
-                        $data['guest'] = trim($_GET['guest']);
-                    }
+                    
                     $amenities = $this->input->post('amenities')?$this->input->post('amenities'):'';
                     $experiences = $this->input->post('experiences')?$this->input->post('experiences'):'';
                     $bedroom = $this->input->post('bedroom')?$this->input->post('bedroom'):'';
@@ -73,8 +82,6 @@
                         ));
                         exit;
                     }
-                    
-                    
                     
                     $start = isset($_GET['page'])&&trim($_GET['page'])!=''?$_GET['page']-1:0;
                     
@@ -106,7 +113,18 @@
                     $this->load->view('site/layout', isset($data) ? ($data) : null);
 	    }
 
-		function room_detail(){
+		function room_detail($id){
+                    if($id==null){
+                        redirect(base_url());
+                    }
+                    $encode = $this->config->item('encode_id')->decode($id);
+                    
+                    if(count($encode)<=0){
+                        redirect(base_url());
+                    }else{
+                        $data['id_encode'] = $id;
+                    }
+                    
                     if(isset($_GET['ch_in'])&&trim($_GET['ch_in'])!=''){
                         $data['ch_in'] = trim($_GET['ch_in']);
                     }
@@ -117,11 +135,9 @@
                         $data['guest'] = trim($_GET['guest']);
                     }
                     $this->load->model('amenities_model');
-
-                    $id = $this->uri->rsegment(3);
-                    $id = (int)$id;
+                    $id_decode = (int)$encode[0];
                     $data_room = array(
-                        'room_id'=>$id,
+                        'room_id'=>$id_decode,
                         
                     );
                     $this->session->set_userdata($data_room);
@@ -129,24 +145,104 @@
 
                     $list_amenities = $this->amenities_model->get_list();
                     $data['list_amenities'] = $list_amenities;
-                    $info = $this->post_room_model->getInfoDetail($id,$input);
+                    $info = $this->post_room_model->getInfoDetail($id_decode,$input);
 
                     if($info){
                             $data['info'] = $info;
                     }
-
                     $data['meta_title'] = 'room_detail';
                     $data['temp'] = ('site/room/room_detail');
                     $this->load->view('site/layout_index', isset($data) ? ($data) : null);
 		}
                 
-                function order_room(){
+                function order_room($id=''){
                     if(!isset($_SESSION['user_name'])){
-                        redirect('site/home/register');
+                        redirect('home/register');
                     }else{
+                        $user_id = $this->session->userdata('user_id');
+                        if(!isset($user_id)||$user_id==''){
+                            redirect(base_url());
+                        }
+                        if($id==''){
+                            redirect(base_url());
+                        }
+                        $id_decode = $this->config->item('encode_id')->decode($id);
+                        if(count($id_decode)<=0){
+                            redirect(base_url());
+                        }else{
+                            $data['id_encode'] = $id;
+                        }
+                        $checkin = $this->input->get('checkin')?$this->input->get('checkin'):'';
+                        $checkout = $this->input->get('checkout')?$this->input->get('checkout'):'';
+                        $guests = $this->input->get('guests')?$this->input->get('guests'):'';
+                        if($checkin==''||$checkout==''||$guests==''){
+                            redirect(base_url().'room/room_detail/'.$data['id_encode']);
+                        }
+                        $input = array(
+                            'where'=>array(
+                                    'post_room_id'=>$id_decode[0],
+                                )
+                            );
+                        $date1 = new DateTime();
+                        $date2 = new DateTime();
+                        $dateNow = new DateTime();
+                        $data['checkin'] = $date1->setDate(
+                                date('Y',  strtotime(str_replace('/', '-', $checkin))), 
+                                date('m',  strtotime(str_replace('/', '-', $checkin))), 
+                                date('d',  strtotime(str_replace('/', '-', $checkin)))
+                            );
+                        $data['guests'] = $guests;
+                        $data['checkout'] = $date2->setDate(
+                                date('Y',  strtotime(str_replace('/', '-', $checkout))), 
+                                date('m',  strtotime(str_replace('/', '-', $checkout))), 
+                                date('d',  strtotime(str_replace('/', '-', $checkout)))
+                            );
+                        if($data['checkin']>$data['checkout']){
+                            redirect(base_url().'room/room_detail/'.$data['id_encode']);
+                        }
+                        if($data['checkin']<  $dateNow||$data['checkout']<$dateNow){
+                            redirect(base_url().'room/room_detail/'.$data['id_encode']);
+                        }
+                        $prices = $this->post_room_model->get_row($input);
+                        $data['name_room'] = $prices->post_room_name;
+                        //giá 1 đêm
+                        $data['price_night_vn'] = $prices->price_night_vn;
+                        $data['max_guest'] = $prices->num_guest;
+                        // giá vượt quá số người
+                        $data['price_guest_more_vn'] = $prices->price_guest_more_vn;
+                        //phí dọn dẹp
+                        $data['clearning_fee_vn'] = $prices->clearning_fee_vn;
+                        $data['sub_day'] = $data['checkout']->diff($data['checkin']);
+                        $data['distance_day'] = $data['sub_day']->days+1;
+                        $data['price_all_night'] = $data['distance_day']*$data['price_night_vn'];
+                        if($guests<=$data['max_guest']){
+                            $data['guest_change'] = 0;
+                        }
+                        else{
+                            $data['guest_change'] = $guests-$data['max_guest'];
+                        }
+                        if($data['guest_change']<=0){
+                            $data['price_all_night_add_fee'] = $data['price_all_night']+$data['clearning_fee_vn'];
+                        }else{
+                            $data['price_all_night_add_fee'] = $data['price_all_night']+$data['clearning_fee_vn']+($data['guest_change'])*$data['price_guest_more_vn'];
+                        }
+                        $input = array();
+                        $input = array(
+                            'where'=>array(
+                                    'user_id'=>$user_id,
+                                )
+                            );
+                        $data['user'] = $this->user_model->get_row($input);
+//                        pre($data['user']);return;
+                        $data['meta_title'] = 'order room';
                         $data['temp'] = ('site/room/order');
-                    $this->load->view('site/layout', isset($data) ? ($data) : null);
+                        $this->load->view('site/layout_index', isset($data) ? ($data) : null);
                     }
+                }
+                
+                function validate_room($id=''){
+                    $data['temp'] = ('site/room/order');
+                    $this->load->view('site/layout', isset($data) ? ($data) : null);
                 }
 	}
 ?>

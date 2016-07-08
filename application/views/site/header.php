@@ -8,7 +8,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="<?php echo base_url('site/home');?>">STAR VIEW</a>
+            <a class="navbar-brand" href="<?php echo base_url('home');?>">STAR VIEW</a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
@@ -18,9 +18,8 @@
                 <li><a href="<?php echo base_url()?>">Xin chào <?php echo $_SESSION['user_name']?></a></li>
                 <li><a href="<?php echo base_url().SiteDefault?>postnews1">Đăng tin cho thuê</a></li>
             <?php }else{?>
-                <li><a href="<?php echo base_url();?>site/home/register">Đăng kí</a></li>
-                    <li><a href="<?php echo base_url();?>site/home/login">Đăng nhập</a></li>
-                    <li><a href="<?php echo base_url();?>site/home/postnews1">Đăng tin cho thuê</a></li>
+                <li><a href="<?php echo base_url();?>home/register">Đăng kí</a></li>
+                    <li><a href="<?php echo base_url();?>home/login">Đăng nhập</a></li>
                 <?php }?>
                 
             </ul>

@@ -66,7 +66,7 @@
                         <td>Mô tả</td>
                         <!--<td>Người đăng</td>-->
                         <!--<td>trạng thái</td>-->
-                        <!--<td>Created</td>-->
+                        <td>Gửi đến</td>
                         <td>Hành động</td>
                         <!--<td>ID</td>-->
                     </tr>
@@ -84,16 +84,19 @@
                     <?php
                         if(isset($list)){
                             $i = 0;
-                            foreach ($list as $row) {
+                            foreach ($list->result() as $row) {
                                 $i++;
                     ?>
                     <tr class='row_20'>
                         <td class="textC"><?php echo $i;?></td>
                         <td class="textC img_room" >
-                        	<?php echo $row->email_name?>
+                        	<?php echo $row->email_title?>
                         </td>
                         <td class="textC img_room" >
                         	<?php echo $row->description?>
+                        </td>
+                        <td class="textC">
+                            <?php echo 'Người';?>
                         </td>
                         <td class="textC">
                             <a href="<?php echo base_url().'admin/emails/edit/'.$row->email_id?>" class="lightbox" title="edit">

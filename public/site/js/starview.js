@@ -72,8 +72,33 @@ $(document).ready(function(){
         var bedroom ;
         var bathroom ;
         var beds ;
-
         $('.tclick').click(function(){
+            var currentclick = $(this);
+            if(currentclick.parent().hasClass('book-action')){
+                var checkin = $('#bookin-dpk');
+                var checkout = $('#bookout-dpk');
+                var guest = $('#guests');
+                console.log(typeof $('#name_customer'));
+                if(typeof $('#name_customer')==undefined || $('#name_customer').val()=='' ||typeof $('#phone_number')==undefined || $('#phone_number').val()=='' ||typeof $('#email')==undefined || $('#email').val()=='')
+                {
+                    $('#myModal').modal('show');
+                    return;
+                }
+                if(checkin.val()==''||typeof checkin.val() == undefined){
+                    $('.info-book').html('nhập ngày nhận phòng');
+                    return;
+                }
+                if(checkout.val()==''||typeof checkout.val() == undefined){
+                    $('.info-book').html('nhập ngày trả phòng');
+                    return;
+                }
+                if(guest.val()==''||typeof guest.val() == undefined){
+                    $('.info-book').html('nhập số khách');
+                    return;
+                }
+                alert(11111111111);
+                window.location.href = url+'room/order_room/0o6qe97zpr?checkin='+checkin.val()+"&checkout="+checkout.val()+"&guests="+guest.val();
+            }else{
             var amenities = '';
             var experiences = '';
             var bedroom     =$('#bedroom').val();
@@ -100,7 +125,7 @@ $(document).ready(function(){
     //            }
             })
     $.ajax({
-        url:url+'site/room/search',
+        url:url+'room/search',
         data:amenities,
         type:'POST',
         success:function(data){
@@ -109,7 +134,7 @@ $(document).ready(function(){
         },
         error:'',
         dataType: 'json',
-    })
+    })}
         })
     });
 })

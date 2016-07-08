@@ -7,11 +7,10 @@ class Email_model extends MY_Model
     var $key = 'email_id';
 
     function getList($input = array()){
-//		$this->db->select($this->table.'.*,role_name');
-		$this->get_list_set_input($input);
-		$this->db->from($this->table);
-//		$this->db->join('role',$this->table.'.role_id = role.role_id');
-		$query = $this->db->get();
-		return $query->result();
+        $this->db->join('email_template','email_template.email_template_id=email_type');
+        return $this->db->get($this->table);
+    }
+    function getEmailTemplate(){
+        return $this->db->get('email_template');
     }
 }

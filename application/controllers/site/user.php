@@ -150,15 +150,83 @@ class User extends MY_Controller
                 }else{
                     $this->session->set_flashdata('message', 'Thêm dữ liệu thất bại!');
                 }
-                redirect(base_url('site/home/index'));
+                redirect(base_url('home'));
 //            }
         }
         $data['title'] = 'Đăng kí tài khoản';
         $data['temp'] = ('site/home/index');
         $this->load->view('site/layout', isset($data) ? ($data) : null);
     }
+    
+    public function createFast(){
+        $url_curl = $this->input->post('urlCurl')?trim($this->input->post('urlCurl')):'';
+        $nameCustomer = $this->input->post('nameCustomer')?trim($this->input->post('nameCustomer')):'';
+        $phoneNumber = $this->input->post('phoneNumber')?trim($this->input->post('phoneNumber')):'';
+        $email = $this->input->post('email')?trim($this->input->post('email')):'';
+        
+        $this->load->model("role_model");
+        $this->load->library('form_validation');
+        $this->load->helper('form');
+        $role_id = 3;
 
-    function edit(){
+        $input = array();
+        $input['order'] = array('role_id','ASC');
+        $list_role = $this->role_model->get_list($input);
+        $data['list_role'] = $list_role;
+        if(count($_POST)>0){
+                $role_id    = $role_id;
+                $data = array(
+                    'email' => $email,
+                    'role_id' => $role_id,  
+                );
+                if($this->user_model->check_exists($data)){
+                    echo json_encode(array(
+                        'sucssec'=>true,
+                        'action'=>'Ton tai',
+                    ));
+                }else{
+                    $data['last_name'] = $nameCustomer;
+                    $data['first_name'] = '1';
+                    $user_name = vn_str_filter($nameCustomer);
+                    $user_name = str_replace(' ', '_', $user_name);
+                    $index = 0;
+                    while (1){
+                        $index++;
+                        if($index>50){
+                            echo json_encode(array(
+                                'sucssec'=>FALSE,
+                                'action'=>'Qua nhieu lan reload',
+                            ));
+                            break;
+                        }
+                        $user_name_tmp = $user_name.rand(1, 99999);
+                        if($this->user_model->check_exists(array('user_name'=>$user_name_tmp))){
+                            continue;
+                        }else{
+                            $data['user_name'] = $user_name_tmp;
+                            $data['password'] = rand(100000, 999999);
+                            if($this->user_model->create($data)){
+                                echo json_encode(array(
+                                    'sucssec'=>true,
+                                    'action'=>'Tao thanh cong user',
+                                ));
+                                exit;
+                            }else{
+                                echo json_encode(array(
+                                    'sucssec'=>FALSE,
+                                    'action'=>'Khong tao duoc ',
+                                ));
+                                exit;
+                            }
+                        }
+                    }
+                }
+//            }
+        }
+        exit;
+        
+    }
+            function edit(){
         $this->load->model("role_model");
 
         $this->load->library('form_validation');

@@ -108,20 +108,19 @@
     
 </div>
  <script>
-     $(document).ready(function(){
-         
-          $(document).on('submit', '#form_save_config', function(){
-         var data = $(this).serialize();
-         $.ajax({
-            type : 'POST',
-            url  : $(this).attr('action'),
-            data : data,
-            success :  function(data){
-                $.toaster('', data.message, data.title);
-            },
-            dataType:'JSON',
-         });
-         return false;
+    $(document).ready(function(){
+        $(document).on('submit', '#form_save_config', function(){
+        var data = $(this).serialize();
+        $.ajax({
+           type : 'POST',
+           url  : $(this).attr('action'),
+           data : data,
+           success :  function(data){
+               $.toaster('', data.message, data.title);
+           },
+           dataType:'JSON',
+        });
+        return false;
         });
     })
         </script>

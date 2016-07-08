@@ -26,10 +26,12 @@
 </script>
 <script type="text/javascript" src="<?php echo base_url();?>public/site/js/jquery-1.12.4.min.js"></script>
 <script type="text/javascript" src="<?php echo base_url();?>public/site/js/bootstrap.min.js"></script>
+<!--<script type="text/javascript" src="<?php echo base_url();?>public/site/js/bootstrapValidator.min.js"></script>-->
 <script type="text/javascript" src="<?php echo base_url();?>public/site/js/wow.min.js"></script>
 <script type="text/javascript" src="<?php echo base_url();?>public/site/js/owl.carousel.min.js"></script>
 <script type="text/javascript" src="<?php echo base_url();?>public/site/js/fotorama.js"></script>
 <script type="text/javascript" src="<?php echo base_url();?>public/site/js/starview.js"></script>
 <script type="text/javascript" src="<?php echo base_url();?>public/site/js/jquery-ui.js"></script>
 <script type="text/javascript" src="<?php echo base_url();?>public/site/js/bootstrap-datepicker.js"></script>
+<!--<script type="text/javascript" src="<?php echo base_url();?>public/site/js/jquery.query-object.js"></script>-->
 <!--<script type="text/javascript" src="<?php //echo base_url();?>public/site/js/web.js"></script>-->

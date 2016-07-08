@@ -68,7 +68,8 @@
             </a>
             <ul class="sub collapse" id="collapse5" aria-expanded="false" style="height: 1px;">
                 <li>
-                    <a href="<?php echo  admin_url('post_room');?>">Danh sách phòng</a>
+                    <a href="<?php echo  admin_url('post_room');?>">Danh sách phòng đăng</a>
+                    <a href="<?php echo  admin_url('order_room');?>">Danh sách phòng đăng ký</a>
                 </li>
                 
             </ul>
@@ -80,7 +81,8 @@
             </a>
             <ul class="sub collapse" id="collapse6" aria-expanded="false" style="height: 1px;">
                 <li>
-                    <a href="<?php echo  admin_url('emails');?>">Danh sách email</a>
+                    <a href="<?php echo  admin_url('emails');?>">Danh sách loại email</a>
+                    <a href="<?php echo  admin_url('emails/history');?>">Lịch sử gửi email</a>
                 </li>
             </ul>
         </li>

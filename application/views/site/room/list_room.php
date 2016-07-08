@@ -3,9 +3,6 @@
 		<div class="container">
 			<div class="row">
                             <?php 
-//                            if(isset($checkin)) $data_search['checkin'] = trim($checkin);
-//                            if(isset($checkout)) $data_search['checkout'] = trim($checkout);
-//                            if(isset($guest)) $data_search['guest'] = trim($guest);
                              $this->load->view('site/home/block_search');?>
 			</div>
 		</div>
@@ -83,11 +80,7 @@
 									<div class="form-group">
 									    <label for="">Phòng ngủ</label>
 									    <select name="bedroom" class="form-control" id="bedroom">
-                                                                                <?php // for($i=0;$i<){
-                                                                                    
-//                                                                                }
-                                                                                
-?>
+                                                                                <?php ?>
 									    	<option  class="tclick" data-tloc="0" data-tkey="Bedrooms" role="presentation">Bất kỳ</option>
 									    	<option  class="tclick" data-tloc="1" data-tkey="Bedrooms" role="presentation">1</option>
 									    	<option  class="tclick" data-tloc="2" data-tkey="Bedrooms" role="presentation">2</option>
@@ -194,12 +187,14 @@
                                             if(isset ($checkin))$query .= '&ch_in='.$checkin;
                                             if(isset ($checkout))$query .= '&ch_out='.$checkout;
                                             if(isset ($guest))$query .= '&guest='.$guest;
+                                            if($query=='?')$query = '';
 						foreach ($list_room as $key => $room) {	
 						
 					?>
 					<div class="list-room-item clearfix">
 						<div class="photo col-sm-5 col-xs-12">
-							<a href="<?php echo base_url('site/room/room_detail/'.$room->post_room_id);?>">
+							<a href="<?php 
+                                                        echo base_url('room/room_detail/'.$encode->encode($room->post_room_id).$query);?>">
 								<?php
 									$arr_img = json_decode($room->image_list); 
 								?>
@@ -210,7 +205,7 @@
 						<div class="info-r col-sm-7 col-xs-12">
 							<div class="info-data">
 								<h3 class="title-r">
-									<a href="<?php echo base_url('site/room/room_detail/'.$room->post_room_id.$query);?>"><?php echo $room->post_room_name;?></a>
+									<a href="<?php echo base_url('room/room_detail/'.$encode->encode($room->post_room_id).$query);?>"><?php echo $room->post_room_name;?></a>
 								</h3>
 								<p class="type-location">
 									<span class="type"><?php echo $room->house_type_name;?></span>
@@ -234,7 +229,7 @@
 								<p class="type-sales">
 									<!-- <span class="label label-default tag sales-text">Khuyến mãi phút cuối</span> -->
 								</p>
-								<a href="<?php echo base_url('site/room/room_detail/'.$room->post_room_id);?>" class="btn btn-default more-show">Hiển thị thêm</a>
+								<a href="<?php echo base_url('room/room_detail/'.$room->post_room_id);?>" class="btn btn-default more-show">Hiển thị thêm</a>
 							</div>
 						</div>
 					</div>
@@ -253,11 +248,3 @@
 		</div>
 	</div>
 </section>
-<script type="text/javascript">
-$(document).ready(function(){
-    var data=[];
-    
-   
-    
-})
-</script>

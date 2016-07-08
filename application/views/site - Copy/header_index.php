@@ -16,8 +16,7 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="register.html">Đăng kí</a></li>
-                    <li><a href="<?php echo base_url();?>site/home/login">Đăng nhập</a></li>
-                    <li><a href="<?php echo base_url();?>site/home/postnews1">Đăng tin cho thuê</a></li>
+                    <li><a href="<?php echo base_url();?>home/login">Đăng nhập</a></li>
                 </ul>
             </div><!-- /.navbar-collapse -->
         </div>

@@ -96,7 +96,7 @@
                     <tr class='row_20'>
                         <td class="textC"><?php echo $i;?></td>
                         <td class="textC img_room" >
-                        	<a href="<?php echo base_url('site/room/room_detail/'.$row->post_room_id);?>" target = "_blank">
+                        	<a href="<?php echo base_url('room/room_detail/'.$row->post_room_id);?>" target = "_blank">
                         		<?php
                         			$img = json_decode($row->image_list);
                         		?>
@@ -105,7 +105,7 @@
                         </td>
                         <td class="textC" style="text-align: left;">
                         	<p class="room_name">
-                            <a href = "<?php echo base_url('site/room/room_detail/'.$row->post_room_id);?>" target = "_blank"><?php echo $row->post_room_name;?></a>
+                            <a href = "<?php echo base_url('room/room_detail/'.$row->post_room_id);?>" target = "_blank"><?php echo $row->post_room_name;?></a>
                             </p>
                         	<p class="address"><?php echo $row->address_detail?></p>
                         	<p class="info_room">

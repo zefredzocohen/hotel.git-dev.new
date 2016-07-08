@@ -12,9 +12,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |
 */
 
-$hook['post_controller_constructor'] = array(
+$hook['post_controller_constructor'][] = array(
     'class'             =>      '',
     'function'          =>      'load_config',
+    'filename'         =>      'load_config.php',
+    'filepath'          =>      'hooks'
+);
+$hook['post_controller_constructor'][] = array(
+    'class'             =>      '',
+    'function'          =>      'load_encode',
     'filename'         =>      'load_config.php',
     'filepath'          =>      'hooks'
 );

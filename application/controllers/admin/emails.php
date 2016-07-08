@@ -5,7 +5,6 @@
         function __construct(){
             parent::__construct(get_class());
             $this->load->model('email_model');
-//                        $this->load->lang('comm_email');
             $this->lang->load('comm_email_lang.php', 'vietnamese');
         }
 
@@ -38,8 +37,7 @@
 
             $message = $this->session->flashdata();
             $data['message'] = $message;
-
-            $list = $this->email_model->get_list($input);
+            $list = $this->email_model->getList($input);
             $data['total'] = $total;
             $data['list'] = $list;
             $data['title'] = 'Danh sách email';
@@ -48,22 +46,39 @@
         }
 
         function edit($id=-1){
-                    if($id>0){
-                        $input = array(
-                            'where'=>array(
-                                'email_id'=>1,
-                            )
-                        );
-                        $this->email_model->get_row($input);
-                        $data['email'] = $this->email_model->get_row($input);
-                        $data['temp'] = 'admin/emails/edit';
-			$this->load->view('admin/layout', (isset($data)) ? $data: NULL);
-                    }
-                }
+            if($id>0){
+                $input = array(
+                    'where'=>array(
+                        'email_id'=>$id,
+                    )
+                );
+                $join = array(
+                    'email_template'=>'email_template_id::email_type',
+                );
+                $data['email'] = $this->email_model->get_row($input,$join);
+                $data['email_template'] = $this->email_model->getEmailTemplate()->result();
+                $data['temp'] = 'admin/emails/edit';
+                $this->load->view('admin/layout', (isset($data)) ? $data: NULL);
+            }
+        }
         
         function delete($id=-1){
             if($id>0){
                 $this->email_model->delete($id);
+            }   
+        }
+        function save($id=-1){
+            if($id>0){
+                $data = array(
+                    'email_title' => $this->input->post('title_email')?trim($this->input->post('title_email')):'',
+                    "description" => $this->input->post('edit_email')?trim($this->input->post('edit_email')):'',
+                    'email_type' => $this->input->post('type_email')?trim($this->input->post('type_email')):'',
+                );
+                if($this->email_model->update($id,$data))
+                    echo json_encode (array('success'=>true,'message'=>$data['description']));
+                else {
+                    echo json_encode (array('success'=>FALSE,'message'=>'error_email_update'));
+                }
             }
         }
     }

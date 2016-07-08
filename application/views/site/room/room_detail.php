@@ -19,9 +19,9 @@
 					<div class="tit-room">
 						<h1><?php echo (isset($info))? $info->post_room_name : '';?></h1>
 						<p>
-							<?php
-								echo (isset($info))? $info->house_type_name.' - '.$info->room_type_name.' - '.$info->address_detail : '';
-							?>
+                                                    <?php
+                                                        echo (isset($info))? $info->house_type_name.' - '.$info->room_type_name.' - '.$info->address_detail : '';
+                                                    ?>
 						</p>
 					</div>
 					<div class ="slider-img">
@@ -173,7 +173,17 @@
 								<p class="price-method">Giá trung bình theo đêm</p>
 							</div>
 						</div>
-						<div class="data-guest hidden-xs">
+						<div class="dates-guests hidden-xs">
+                                                    <div class="prices">
+                                                                <span class="tag discount-lmd">
+                                                          Khuyến mãi: Giảm 15%!
+                                                        </span>
+                                                      <p class="currency">VND
+                                                        <del>9.799.743</del>
+                                                      </p>
+                                                      <p class="price"><span class="nightly-price">8.341.176</span></p>
+                                                      <p class="per-night">Giá Trung bình theo đêm</p>
+                                                            </div>
                                                     <?php $query = "";
                                                         if(isset($ch_in))$query.='&ch_in='.$ch_in;
                                                         if(isset($ch_out))$query.='&ch_out='.$ch_out;
@@ -182,7 +192,8 @@
                                                         else $room_id = 1;
                                                     
                                                     ?>
-                                                    <form action="<?php echo base_url('site/room/order_room/?id='.$room_id.$query);?>" id="frm-book" class="clearfix">
+                                                    <div class="dates-guests">
+                                                        <form  id="frm-book" class="clearfix" method="POST" action="<?php echo base_url().'payments/book/'.$id_encode?>">
 								<div class="form-group w30 pull-left book-wrap">
 								    <label for="">Nhận phòng</label>
                                                                     <input type="text" class="form-control bookin" id ="bookin-dpk" value="<?php echo isset($ch_in)?$ch_in:'';?>" placeholder="dd/mm/yyyy">
@@ -207,58 +218,65 @@
 								    </select>
 								</div>
 								<div class="clearfix"></div>
-								<div class="book-action">
-									<button type="submit" class="btn btn-success">
+							</form>
+                                                        <div class="fees">
+                                                            
+                                                        </div>
+                                                        <div class="alert alert-warning info-book"></div>
+                                                    </div>
+                                                    <div class="book-action">
+<!--									<button type="submit" class="btn btn-success">
+										<span class="glyphicon glyphicon-time"></span> Đặt phòng
+									</button>-->
+                                                                        <button  class="btn btn-success tclick" data-toggle="modal" data-target="#myModal">
 										<span class="glyphicon glyphicon-time"></span> Đặt phòng
 									</button>
+                                                                        <?php if(!$this->session->userdata('user_id')){ ?>
+                                                                            <div class="modal fade" id="myModal" role="dialog">
+                                                                                <div class="modal-dialog">
+
+                                                                                  <!-- Modal content-->
+                                                                                  <div class="modal-content">
+                                                                                    <div class="modal-header">
+                                                                                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                                                      <h4 class="modal-title">Thông tin đặt phòng</h4>
+                                                                                      <p class="error_submit"></p>
+                                                                                    </div>
+                                                                                    <div class="modal-body">
+                                                                                        <div class="row">
+                                                                                            <div class="col-md-12">
+                                                                                                  <div class="form-group">
+                                                                                                    <label for="input_name_customer" class="control-label ">Tên khách hàng</label>
+                                                                                                    <div class="input-field">
+                                                                                                        <input type="text" class="form-control " name = "name_customer" id="name_customer" />
+                                                                                                    </div>
+                                                                                                  </div>
+                                                                                                  <div class="form-group">
+                                                                                                    <label for="input_phone_number" class="control-label ">Số điện thoại</label>
+                                                                                                    <div class="input-field">
+                                                                                                        <input type="text" class="form-control" name="phone_number" id="phone_number"/>
+                                                                                                    </div>
+                                                                                                  </div>
+                                                                                                <div class="form-group">
+                                                                                                    <label for="input_email" class="control-label ">Địa chỉ email</label>
+                                                                                                    <div class="input-field">
+                                                                                                        <input type="email" class="form-control" name="email" id="email"/>
+                                                                                                    </div>
+                                                                                                  </div>
+                                                                                            
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="modal-footer">
+                                                                                        <button type="button" data-dismiss="modal" class="btn btn-default">Đóng</button>
+                                                                                        <button type="button" class="btn btn-primary" id="save_info_customer">Lưu thông tin</button>
+                                                                                    </div>
+                                                                                  </div>
+
+                                                                                </div>
+                                                                              </div>
+                                                                        <?php }?>
 								</div>
-							</form>
-						</div>
-						<div class="member clearfix">
-							<h2 class="visible-xs owner-xs">Chủ nhà</h2>
-							<div class="member-wrap clearfix">
-								<div class="member-avt pull-left">
-									<img src="<?php echo base_url(); ?>public/site/images/avata.jpg" width="100px" height="100px"/>
-								</div>
-								<div class="member-info">
-									<h5 class="name-mb"><?php echo (isset($info))? $info->last_name.' '.$info->first_name : ''; ?></h5>
-									<p class="since">Là thành viên từ tháng <?php echo date('m - Y', strtotime($info->user_created));?></p>
-									<p class="link-show">
-										<a href="#">Xem thông tin cá nhân</a>
-									</p>
-								</div>
-							</div>
-							<div class="update">
-								<p><span class="glyphicon glyphicon-refresh"></span> Cập nhật 2 ngày trước!</p>
-							</div>
-							<div class="contact-own">
-								<button class="btn btn-default">Liên hệ Chủ khách sạn</button>
-							</div>
-						</div>
-						<div class="share">
-							<p>Chia sẻ bài đăng này</p>
-							<ul>
-								<li class="inline">
-									<a href="#">
-										<img src="<?php echo base_url(); ?>public/site/images/icon/share-facebook.png">
-									</a>
-								</li>
-								<li class="inline">
-									<a href="#">
-										<img src="<?php echo base_url(); ?>public/site/images/icon/share-twitter.png">
-									</a>
-								</li>
-								<li class="inline">
-									<a href="#">
-										<img src="<?php echo base_url(); ?>public/site/images/icon/share-gplus.png">
-									</a>
-								</li>
-								<li class="inline">
-									<a href="#">
-										<img src="<?php echo base_url(); ?>public/site/images/icon/share-pinterest.png">
-									</a>
-								</li>
-							</ul>
 						</div>
 					</div>
 				</div>
@@ -273,8 +291,9 @@
 
 <script type="text/javascript">
 	$(document).ready(function(){
-		// $('#bookin-dpk').datepicker();
-		// $('#bookout-dpk').datepicker();
+            $('#name_customer').keydown(function(){$('.error_submit').html('');});
+            $('#phone_number').keydown(function(){$('.error_submit').html('');});
+            $('#email').keydown(function(){$('.error_submit').html('');});
 		var nowTemp = new Date();
 		var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
 		 
@@ -288,6 +307,19 @@
 		    var newDate = new Date(ev.date)
 		    newDate.setDate(newDate.getDate() + 1);
 		    checkout.setValue(newDate);
+                    if(checkout.valueOf()!=''){
+                        $.ajax({
+                          url:'<?php echo base_url().'spaces/prices/'.$id_encode?>',
+                          type: 'POST',
+                          dataType: 'json',
+                          data: {checkin:$('#bookin-dpk').val(),checkout:$('#bookout-dpk').val(),guests:$('#guests').val()},
+                          success: function (data) {
+                              console.log(data.prices);
+                              if(typeof  data.error!= undefined){$('.fees').html(data.error);}
+                              if(typeof  data.prices!= undefined){ $('.fees').html(data.prices);}
+                            }
+                        })
+                    }
 		  }
 		  checkin.hide();
 		  $('#bookout-dpk')[0].focus();
@@ -299,7 +331,75 @@
 		  format: 'dd/mm/yyyy'
 		}).on('changeDate', function(ev) {
 		  checkout.hide();
+                  if(checkin.valueOf()!=''){
+                        $.ajax({
+                          url:'<?php echo base_url().'spaces/prices/'.$id_encode?>',
+                          type: 'POST',
+                          dataType: 'json',
+                          data: {checkin:$('#bookin-dpk').val(),checkout:$('#bookout-dpk').val(),guests:$('#guests').val()},
+                          success: function (data) {
+                              console.log(data.prices);
+//                              if(typeof  data.error!= undefined)$('.fees').html(data.error);
+//                              else $('.fees').html(data.prices);
+                                if(typeof  data.error!= undefined){$('.fees').html(data.error);}
+                              if(typeof  data.prices!= undefined){ $('.fees').html(data.prices);}
+                            }
+                        })
+                    }
 		}).data('datepicker');
+                $('#frm-book').on('submit', function(ev) {
+                    var checkin = $('#bookin-dpk');
+                    var checkout = $('#bookout-dpk');
+                    var guest = $('#guests');
+                    <?php if(!$this->session->userdata('user_id')){?>
+                    $('#myModal').modal('show');
+                    return false;
+                    <?php }?>
+                    var data = {checkin:checkin.val(),checkout:checkout.val(),guest:guest.val()};
+                    $.ajax({
+                        type : 'POST',
+                        url  : $(this).attr('action'),
+                        data : data,
+                        success :  function(data){
+                            console.log(data);
+                        },
+                        dataType:'JSON',
+                    })
+                    ev.preventDefault();
+                });
+                $('#save_info_customer').on('click',function(ev){
+                    
+                    var name_customer = $('#name_customer').val();
+                    var phone_number = $("#phone_number").val();
+                    var email = $("#email").val();
+                    //check info
+                    if(typeof  name_customer ==undefined || name_customer.length <6 || name_customer.trim()==''){
+                        $('.error_submit').html('Thông tin người dùng sai');
+                        return false;
+                    }
+                    if(typeof  phone_number ==undefined || phone_number.length <9 || phone_number.trim()==''){
+                        $('.error_submit').html('Thông tin số điện thoại sai');
+                        return false;
+                    }
+                    if(typeof  email ==undefined || email.length <9 || email.trim()==''){
+                        $('.error_submit').html('Thông tin email sai');
+                        return false;
+                    }
+                    var urlCurl = window.location.href;
+                    <?php $urlCurrent = url_origin($_SERVER);?>
+                    urlCurl = urlCurl.split('#')[0];
+                    var data = {nameCustomer: name_customer, phoneNumber: phone_number,email:email,urlCurl:urlCurl};
+                    $.ajax({
+                        type : 'POST',
+                        url  : "<?php echo base_url().'user/createFast'?>",
+                        data : data,
+                        success :  function(data){
+                            window.location.href = '<?php echo $urlCurrent;?>';
+//                            window.location.href = ''+urlCurl;
+                        },
+                        dataType:'JSON',
+                    })
+                })
 	})
 </script>
 
@@ -324,5 +424,10 @@
 	}
 
 </script>
-
+<style>
+    .error_submit{
+        text-align: center;
+        color: red;
+    }
+</style>
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBwl-pYart0L9n0XPX_V5AuFFPmk-o-rlM&libraries=places&callback=initMap"></script>

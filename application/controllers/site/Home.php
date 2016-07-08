@@ -5,6 +5,7 @@ class Home extends MY_Controller {
     public function __construct(){
         parent::__construct();
         $this->load->model('Address_model');
+        $this->load->library('form_validation');
     }
     public function index()
     {
@@ -26,6 +27,37 @@ class Home extends MY_Controller {
     }
     public function login()
     {
+        if($this->session->userdata('user_id')!=null)redirect (base_url());
+        if(count($_POST)>0){
+            $redirect = $this->input->get('redirect')!=null?trim($this->input->get('redirect')):base_url();
+            $this->form_validation->set_rules('email', 'Email', 'trim|required');
+            $this->form_validation->set_rules('password','Password', 'trim|required|min_length[6]');
+            if($this->form_validation->run()){
+                $data = array(
+                    'where'=>array(
+                        'email'=>  $this->input->post('email'),
+                        'password'=>  md5($this->input->post('password')),
+                    )
+                );
+                $dataUser = $this->user_model->get_row($data);
+                if($dataUser!=NULL&&count($dataUser)){
+                    $this->session->set_userdata(array(
+                        'user_id'=>$dataUser->user_id,
+                        'last_name'=>$dataUser->last_name,
+                        'first_name'=>$dataUser->first_name,
+                        'user_name'=>$dataUser->user_name,
+                        'email'=>$dataUser->email,
+                        'phone'=>$dataUser->phone,
+                        'avarta'=>$dataUser->avarta,
+                        'role_id'=>$dataUser->role_id,
+                    ));
+                    redirect($redirect);
+                }else{
+                    redirect('home/login');
+                }
+                exit;
+            }
+        }
         $data['meta_title'] = 'Login';
         $data['temp'] = ('site/home/login');
         $this->load->view('site/layout', isset($data) ? ($data) : null);
@@ -58,6 +90,10 @@ class Home extends MY_Controller {
     {
         $data['meta_title'] = 'Register';
         $data['temp'] = ('site/home/register');
+        
+        if($this->session->userdata('user_name')){
+            redirect(base_url());
+        }
         $this->load->view('site/layout', isset($data) ? ($data) : null);
     }
     public function process($query = ''){
