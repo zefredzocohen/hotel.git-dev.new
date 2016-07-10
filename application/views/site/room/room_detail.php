@@ -1,3 +1,6 @@
+<script type="text/javascript"> 
+var id='<?php echo $id_encode;?>';
+</script>
 <section id="breadcrum-wrap">
 	<div class="container">
 		<div class="row">
@@ -179,8 +182,6 @@
                                                         if(isset($ch_in))$query.='&ch_in='.$ch_in;
                                                         if(isset($ch_out))$query.='&ch_out='.$ch_out;
                                                         if(isset($guest))$query.='&guest='.$guest;
-                                                        if(isset($_SESSION['room_id']))$room_id = $_SESSION['room_id'];
-                                                        else $room_id = 1;
                                                     
                                                     ?>
                                                     <div class="dates-guests">
@@ -222,8 +223,7 @@
                                                                         <button  class="btn btn-success tclick" data-toggle="modal" data-target="#myModal">
 										<span class="glyphicon glyphicon-time"></span> Đặt phòng
 									</button>
-                                                                        <?php if(!$this->session->userdata('user_id')){ echo $this->session->userdata('user_id');
-  pre($this->session->all_userdata());?>
+                                                                        <?php if(!$this->session->userdata('user_id')){?>
                                                                             <div class="modal fade" id="myModal" role="dialog">
                                                                                 <div class="modal-dialog">
 
