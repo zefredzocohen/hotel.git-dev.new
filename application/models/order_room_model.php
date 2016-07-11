@@ -34,13 +34,10 @@
                             date('m',  strtotime($value->checkout)), 
                             date('d',  strtotime($value->checkout))
                     );
-                    if(($checkout<=$date1&&($checkin<$checkout))||($checkin<$checkout)&&($checkin>=$date2))continue;
+                    if(($checkout<$date1&&($checkin<=$checkout))||($checkin<=$checkout)&&($checkin>$date2))continue;
                     else return TRUE;
                 }
                 return FALSE;
-//                return $this->db->last_query();
-//                if(count($result)>0)return false;
-//                else  return true;
             }
 	}
 ?>

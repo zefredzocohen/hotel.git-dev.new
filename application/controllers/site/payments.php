@@ -8,6 +8,7 @@ class payments extends MY_Controller
         parent::__construct();
         $this->load->model('mail_template_model');
         $this->load->model('mail_history_model');
+        $this->load->model('email_model');
         $this->load->library('email');
          $this->load->model('order_room_model');
          $this->load->model('post_room_model');
@@ -20,6 +21,7 @@ class payments extends MY_Controller
     }
     function book($id=''){
         //check điều kiện
+        pre($this->session->userdata);return;
         $user_id = $this->session->userdata('user_id');
         if(!isset($user_id)||$user_id==''){
             redirect(base_url());
@@ -68,14 +70,10 @@ class payments extends MY_Controller
             redirect(base_url().'room/room_detail/'.$data['id_encode']);
         }
         //check room in database
-//        var_dump($this->order_room_model->check_exists_room($id_decode[0], $data['checkin'], $data['checkout']));return;
         if($this->order_room_model->check_exists_room($id_decode[0], $data['checkin'], $data['checkout'])){
             // đã tồn tại phòng
-            echo 'da ton tai phong';
             return;
         }
-        echo 'cos the dat duoc phong';
-        return;
         $prices = $this->post_room_model->get_row($input);
         $data['name_room'] = $prices->post_room_name;
         //giá 1 đêm
@@ -107,7 +105,7 @@ class payments extends MY_Controller
              'checkout'=>$data['checkout']->format('Y-m-d'),
              'guests'=>$data['guests'],
          );
-         var_dump($this->order_room_model->create($data_insert));
+//        $this->order_room_model->create($data_insert);
         //gửi email
         $input = array();
         $input = array(
@@ -120,7 +118,9 @@ class payments extends MY_Controller
         
         $config = get_config_email($this->config->item('address_email'),$this->config->item('pass_email'));
         echo $this->email->print_debugger();
-//        $email_contact$this->email->get_row()
+        $email_contact = $this->email_model->get_list(array('1','2','3'));
+        pre($email_contact);
+        return;
         echo $this->sendEmail($this, $data['user']->email, 'Email thông báo đặt phòng', 'email đặt phòng thành công từ người quản trị đến người đặt phòng',$config);
         echo $this->sendEmail($this, $this->config->item('address_email'), 'Email thông báo đặt phòng', 'email đặt phòng thành công từ hệ thống đến người quản trị ',$config);
         echo $this->sendEmail($this, $data['doitac']->email, 'Email thông báo đặt phòng', 'email đặt phòng thành công từ hệ thống đến Đối tác ',$config);

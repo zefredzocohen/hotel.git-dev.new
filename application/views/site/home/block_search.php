@@ -44,34 +44,37 @@
                     
                 </div>
 <script language="JavaScript" type="text/javascript">
-//    $(document).ready(function($){
-//        $('#checkout').datepicker();
-//    })
-    $(document).ready(function($){
-//        $('#checkin').datepicker();
+$(document).ready(function($){
     var nowTemp = new Date();
-    var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);		 
-    var checkin = $('#checkin').datepicker({
-		  onRender: function(date) {
-		    return date.valueOf() < now.valueOf() ? 'disabled' : '';
-		  },
-		   format: 'dd/mm/yyyy'
-		}).on('changeDate', function(ev) {
-		  if (ev.date.valueOf() > checkout.date.valueOf()) {
-		    var newDate = new Date(ev.date)
-		    newDate.setDate(newDate.getDate() + 1);
-		    checkout.setValue(newDate);
-		  }
-		  checkin.hide();
-		  $('#checkout')[0].focus();
-		}).data('datepicker');
-		var checkout = $('#checkout').datepicker({
-		  onRender: function(date) {
-		    return date.valueOf() <= checkin.date.valueOf() ? 'disabled' : '';
-		  },
-		  format: 'dd/mm/yyyy'
-		}).on('changeDate', function(ev) {
-		  checkout.hide();
-		}).data('datepicker');
-                })
+    var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+    var checkin = $('#checkin');
+    var checkout = $('#checkout');
+    checkin.datepicker({
+        onRender: function(date) {
+            return date.valueOf() < now.valueOf() ? 'disabled' : '';
+        },
+            format: 'dd/mm/yyyy',
+            startDate:now
+      }).on('changeDate', function(ev) {
+        var newDate;
+        if (ev.date.valueOf() > checkout.val()) {
+            newDate  = new Date(ev.date)
+            newDate.setDate(newDate.getDate() );
+        }
+        checkout.datepicker('setStartDate',newDate);
+        checkin.datepicker('hide');
+        $('#checkout')[0].focus();
+    }).data('datepicker');
+    checkout.datepicker({
+    onRender: function(date) {
+        return date.valueOf() <= checkin.val() ? 'disabled' : '';
+    },
+    format: 'dd/mm/yyyy',
+    startDate:now
+    }).on('changeDate', function(ev) {
+        checkout.datepicker('hide');
+        var newDate = new Date(ev.date)
+        newDate.setDate(newDate.getDate() );
+    }).data('datepicker');
+})
  </script>
