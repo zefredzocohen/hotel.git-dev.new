@@ -9,7 +9,6 @@ class Home extends MY_Controller {
     }
     public function index()
     {
-        echo lang('block_hello');
         $data['meta_title'] = 'STAR VIEW Home page';
         $data['temp'] = ('site/home/index');
         $this->load->view('site/layout_index', isset($data) ? ($data) : null);

@@ -214,7 +214,7 @@ var id='<?php echo $id_encode;?>';
                                                         <div class="fees">
                                                             
                                                         </div>
-                                                        <div class="alert alert-warning info-book"></div>
+                                                        <div class="alert alert-warning info-book"><?php pre( $this->session->userdata);?></div>
                                                     </div>
                                                     <div class="book-action">
 <!--									<button type="submit" class="btn btn-success">
